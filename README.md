@@ -58,7 +58,7 @@ Predict classes for the test data.
 ```{r}
 predict(tune.out$best.model, newdata = testData[,])
 ```
-![Confusion Matrix](https://raw.githubusercontent.com/dinonien/PML/master/Assets/test.png)
+![Test Results](https://raw.githubusercontent.com/dinonien/PML/master/Assets/test.png)
 
 #References
 [1] Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings         of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013.
