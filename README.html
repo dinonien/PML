@@ -69,12 +69,58 @@ img {
 </div>
 
 
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="{r}"><code>summary(cars)</code></pre>
-<p>You can also embed plots, for example:</p>
-<p><code>{r, echo=FALSE} plot(cars)</code></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="requirements" class="section level1">
+<h1>Requirements</h1>
+<p>Please load the following libraries.</p>
+<pre class="{r}"><code>library(dplyr)
+library(e1071)
+library(caret)</code></pre>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>Download the files from the given URL. Please note that the data comes from [1].</p>
+<pre class="{r}"><code>download.file(url = &quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv&quot;, destfile=&quot;./Data/pml-test.csv&quot;)
+download.file(url = &quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv&quot;, destfile=&quot;./Data/pml-test.csv&quot;)</code></pre>
+</div>
+<div id="data-processing" class="section level1">
+<h1>Data Processing</h1>
+<p>Load data from CSV files. <code>{r, echo=FALSE} rawTrainingData &lt;- read.csv(&quot;./Data/pml-training.csv&quot;) rawTestData &lt;- read.csv(&quot;./Data/pml-test.csv&quot;)</code></p>
+</div>
+<div id="feature-selection" class="section level1">
+<h1>Feature Selection</h1>
+<p>Only roll, pitch and yaw raw data is used as these are sufficient to recognise activities [2],[3],[4].</p>
+<pre class="{r}"><code>trainingData &lt;- rawTrainingData[,colnames(rawTrainingData)[
+        c(grep(&quot;^roll_&quot;, colnames(rawTrainingData)),grep(&quot;^pitch_&quot;, colnames(rawTrainingData)),grep(&quot;^yaw&quot;,                                                 colnames(rawTrainingData)),grep(&quot;^classe&quot;,colnames(rawTrainingData)))]]
+
+trainingData &lt;- trainingData[complete.cases(trainingData),]
+
+testData &lt;- rawTestData[,colnames(rawTestData)[c(grep(&quot;^roll_&quot;, colnames(rawTestData)),grep(&quot;^pitch_&quot;, 
+        colnames(rawTestData)),grep(&quot;^yaw&quot;,colnames(rawTestData)))]]</code></pre>
+</div>
+<div id="train-svm-algorithm-with-cross-validation" class="section level1">
+<h1>Train SVM Algorithm with Cross Validation</h1>
+<p>The SVM Algorithm is used with a radial kernel and cross validation to find the best values for gamma and cost. SVM has shown good performance for activity recognition [5],[6].</p>
+<pre class="{r}"><code>tune.out &lt;- tune(svm, classe~., data = trainingData, kernel=&quot;radial&quot;, ranges=list(cost=c(.1,1,10,100,1000),gamma=c(.5,1,2,3,4)))  </code></pre>
+</div>
+<div id="confusionmatrix" class="section level1">
+<h1>Confusionmatrix</h1>
+<p>Plot the confusion matrix.</p>
+<pre class="{r}"><code>confusionMatrix(predict(tune.out$best.model,newx=testData[1,]),trainingData[,&quot;classe&quot;])</code></pre>
+</div>
+<div id="predict-testdata" class="section level1">
+<h1>Predict TestData</h1>
+<p>Predict classes for the test data.</p>
+<pre class="{r}"><code>predict(tune.out$best.model, newdata = testData[,])</code></pre>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>[1] Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human ’13) . Stuttgart, Germany: ACM SIGCHI, 2013.</p>
+<p>[2] Ayub, Shahid, Alireza Bahraminisaab, and Bahram Honary. “A sensor fusion method for smart phone orientation estimation.” Proceedings of the 13th Annual Post Graduate Symposium on the Convergence of Telecommunications, Networking and Broadcasting, Liverpool. 2012.</p>
+<p>[3] Kwon, Doo Young, and Markus Gross. “Combining body sensors and visual sensors for motion training.” Proceedings of the 2005 ACM SIGCHI International Conference on Advances in computer entertainment technology. ACM, 2005.</p>
+<p>[4] Lementec, Jean-Christophe, and Peter Bajcsy. “Recognition of arm gestures using multiple orientation sensors: gesture classification.” Intelligent Transportation Systems, 2004. Proceedings. The 7th International IEEE Conference on. IEEE, 2004.</p>
+<p>[5] Singla, Geetika, Diane J. Cook, and Maureen Schmitter-Edgecombe. “Recognizing independent and joint activities among multiple residents in smart environments.” Journal of ambient intelligence and humanized computing 1.1 (2010): 57-63.</p>
+<p>[6] Fleury, Anthony, Michel Vacher, and Norbert Noury. “SVM-based multimodal classification of activities of daily living in health smart homes: sensors, algorithms, and first experimental results.” Information Technology in Biomedicine, IEEE Transactions on 14.2 (2010): 274-283.</p>
+</div>
 
 
 </div>
