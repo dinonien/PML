@@ -63,9 +63,7 @@ img {
 <div id="header">
 <h1 class="title">Practical Machine Learning - Course Project</h1>
 <h4 class="author"><em>D.N.</em></h4>
-<h4 class="date"><em><ol start="13" style="list-style-type: decimal">
-<li>September 2015</li>
-</ol></em></h4>
+<h4 class="date"><em>14th September 2015</em></h4>
 </div>
 
 
@@ -115,6 +113,10 @@ summary(tune.out)</code></pre>
 <p>Predict classes for the test data.</p>
 <pre class="{r}"><code>predict(tune.out$best.model, newdata = testData[,])</code></pre>
 <p><img src="data:image/png;base64,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" alt="Test Results" /></p>
+</div>
+<div id="sample-error" class="section level1">
+<h1>Sample Error</h1>
+<p>Out of sample error is expected to higher than the one from the training set. However, all submissions are correct.</p>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
