@@ -1,7 +1,7 @@
 ---
 title: "Practical Machine Learning - Course Project"
 author: "D.N."
-date: "13. September 2015"
+date: "14th September 2015"
 output: html_document
 ---
 
@@ -59,6 +59,9 @@ Predict classes for the test data.
 predict(tune.out$best.model, newdata = testData[,])
 ```
 ![Test Results](https://raw.githubusercontent.com/dinonien/PML/master/Assets/test.png)
+
+#Sample Error
+Out of sample error is expected to higher than the one from the training set. However, all submissions are correct.
 
 #References
 [1] Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings         of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013.
