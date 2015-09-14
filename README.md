@@ -41,14 +41,17 @@ testData <- rawTestData[,colnames(rawTestData)[c(grep("^roll_", colnames(rawTest
 #Train SVM Algorithm with Cross Validation
 The SVM Algorithm is used with a radial kernel and cross validation to find the best values for gamma and cost. SVM has shown good performance for activity recognition [5],[6].
 ```{r}
-tune.out <- tune(svm, classe~., data = trainingData, kernel="radial", ranges=list(cost=c(.1,1,10,100,1000),gamma=c(.5,1,2,3,4)))  
+tune.out <- tune(svm, classe~., data = trainingData, kernel="radial", ranges=list(cost=c(.1,1,10,100,1000),gamma=c(.5,1,2,3,4))) 
+summary(tune.out)
 ```
+![Cross Validation Summary](https://raw.githubusercontent.com/dinonien/PML/master/Assets/tune_out.png)
 
 #Confusionmatrix
 Plot the confusion matrix.
 ```{r}
 confusionMatrix(predict(tune.out$best.model,newx=testData[1,]),trainingData[,"classe"])
 ```
+![Confusion Matrix](https://raw.githubusercontent.com/dinonien/PML/master/Assets/tune_out.png)
 
 #Predict TestData
 Predict classes for the test data.
